@@ -1,4 +1,10 @@
+from utils import *
+from reduce import reduce_puzzle as reduce
+from only_choice import only_choice
+from tree_search import search
+
 assignments = []
+
 
 def assign_value(values, box, value):
     """
@@ -6,7 +12,7 @@ def assign_value(values, box, value):
     Assigns a value to a given box. If it updates the board record it.
     """
 
-    # Don't waste memory appending actions that don't actually change any values
+    # Don't waste memory appending actions that don11't actually change any values
     if values[box] == value:
         return values
 
@@ -14,6 +20,7 @@ def assign_value(values, box, value):
     if len(value) == 1:
         assignments.append(values.copy())
     return values
+
 
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
@@ -26,42 +33,65 @@ def naked_twins(values):
 
     # Find all instances of naked twins
     # Eliminate the naked twins as possibilities for their peers
+    naked_twins = {}
+    for unit in unitlist:
+        potential_twin_dict = {cell: values[cell] for cell in unit if len(values[cell]) == 2}
+        values_cell_dict = {}
+        for potential_twin_cell, potential_twin_values in potential_twin_dict.items():
+            location_list = values_cell_dict.get(potential_twin_values, []).append(potential_twin_cell)
+            values_cell_dict[potential_twin_values] = location_list
 
-def cross(A, B):
-    "Cross product of elements in A and elements in B."
-    pass
+        for twin_values, twin_value_locations in values_cell_dict.items():
+            if len(twin_value_locations) < 2:
+                values_cell_dict.pop(twin_values)
 
-def grid_values(grid):
-    """
-    Convert grid into a dict of {square: char} with '123456789' for empties.
-    Args:
-        grid(string) - A grid in string form.
-    Returns:
-        A grid in dictionary form
-            Keys: The boxes, e.g., 'A1'
-            Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
-    """
-    pass
+                for location in twin_value_locations:
+                    for peer in get_peer_locations(location):
+                        if peer not in twin_value_locations:
+                            peer_values = values[peer]
+                            for value in twin_values:
+                                peer_values.replace(value, '')
 
-def display(values):
-    """
-    Display the values as a 2-D grid.
-    Args:
-        values(dict): The sudoku in dictionary form
-    """
-    pass
+                            values[peer] = peer_values
 
-def eliminate(values):
-    pass
+    return values
 
-def only_choice(values):
-    pass
+# def cross(A, B):
+#     "Cross product of elements in A and elements in B."
+#     pass
 
-def reduce_puzzle(values):
-    pass
+# def grid_values(grid):
+#     """
+#     Convert grid into a dict of {square: char} with '123456789' for empties.
+#     Args:
+#         grid(string) - A grid in string form.
+#     Returns:
+#         A grid in dictionary form
+#             Keys: The boxes, e.g., 'A1'
+#             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
+#     """
+#     pass
+#
+# def display(values):
+#     """
+#     Display the values as a 2-D grid.
+#     Args:
+#         values(dict): The sudoku in dictionary form
+#     """
+#     pass
 
-def search(values):
-    pass
+# def eliminate(values):
+#     pass
+
+# def only_choice(values):
+#     pass
+
+# def reduce_puzzle(values):
+#     pass
+
+# def search(values):
+#     pass
+
 
 def solve(grid):
     """
@@ -72,6 +102,7 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    pass
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
