@@ -3,12 +3,12 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: Naked twins are the case where for a given set of peers(row, col, unit) there may be a case where for any two cells there can only be two options. In such cases we can eliminate these possible values from other peer.
+A: Naked twins are the case where for a given set of peers(row, col, unit) there may be a case where for any two cells there can only be two options. In such cases we can eliminate these possible values from other peer. Effectively we are adding the constraining the remaining peers of a set to exclude naked twins.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
-
+A: From the introductory lessons we develloped a solution to sudoku puzzles, the constrains we provided for the simple case were to consider acceptable values based on rows, columns and subgrids/squares. We extend this with the diagonals and apply the same rules (only choice, reduce and tree search) to include the diagonal constraints.
+ 
 ### Install
 
 This project requires **Python 3**.
