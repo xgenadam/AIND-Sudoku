@@ -68,13 +68,24 @@ class TestNakedTwins(unittest.TestCase):
     ]
 
     def test_naked_twins(self):
+        from utils import display
+        print('initial sudoku')
+        display(self.before_naked_twins_1)
+
+        print('\n my solution \n')
+        display(solution.naked_twins(self.before_naked_twins_1))
+
+        for possible_soln in self.possible_solutions_1:
+            print('\n possible solution\n')
+            display(possible_soln)
+
+
         self.assertTrue(solution.naked_twins(self.before_naked_twins_1) in self.possible_solutions_1,
                         "Your naked_twins function produced an unexpected board.")
 
     def test_naked_twins2(self):
         self.assertTrue(solution.naked_twins(self.before_naked_twins_2) in self.possible_solutions_2,
                         "Your naked_twins function produced an unexpected board.")
-
 
 
 class TestDiagonalSudoku(unittest.TestCase):

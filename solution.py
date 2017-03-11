@@ -33,26 +33,24 @@ def naked_twins(values):
 
     # Find all instances of naked twins
     # Eliminate the naked twins as possibilities for their peers
-    naked_twins = {}
     for unit in unitlist:
-        potential_twin_dict = {cell: values[cell] for cell in unit if len(values[cell]) == 2}
+        potential_twin_dict = {cell: values[cell] for cell in unit if len(values[cell]) >= 2}
         values_cell_dict = {}
         for potential_twin_cell, potential_twin_values in potential_twin_dict.items():
-            location_list = values_cell_dict.get(potential_twin_values, []).append(potential_twin_cell)
+            location_list = values_cell_dict.get(potential_twin_values, [])
+            location_list.append(potential_twin_cell)
             values_cell_dict[potential_twin_values] = location_list
 
         for twin_values, twin_value_locations in values_cell_dict.items():
-            if len(twin_value_locations) < 2:
-                values_cell_dict.pop(twin_values)
+            if len(twin_value_locations) >= 2:
+                # values_cell_dict.pop(twin_values)
+                # print('twin values {}, locations {}'.format(twin_values, twin_value_locations))
+                for peer in [cell for cell in unit if cell not in twin_value_locations]:
+                    peer_values = values[peer]
+                    for value in twin_values:
+                        peer_values.replace(value, '')
 
-                for location in twin_value_locations:
-                    for peer in get_peer_locations(location):
-                        if peer not in twin_value_locations:
-                            peer_values = values[peer]
-                            for value in twin_values:
-                                peer_values.replace(value, '')
-
-                            values[peer] = peer_values
+                    values[peer] = peer_values
 
     return values
 
