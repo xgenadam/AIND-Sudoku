@@ -101,8 +101,13 @@ def potential_grid_values(grid):
         - keys: Box labels, e.g. 'A1'
         - values: Value in corresponding box, e.g. '8', or '123456789' if it is empty.
     """
-    return OrderedDict([(grid_location, ''.join([str(x) for x in range(1, 10)]))
-        for grid_location in chain(*row_units)])
+
+    values_list = {}
+    for grid_value, cell in zip(grid, chain(*row_units)):
+        cell_value = grid_value if grid_value != '.' else ''.join(str(item) for item in range(1, 10))
+        values_list[cell] = cell_value
+
+    return values_list
 
 
 def eliminate(values):
@@ -198,10 +203,3 @@ def get_location_with_least_values(values):
                             sorted_values)
 
     return next(ordered_values, (None, None))
-
-
-def find_naked_twins(values):
-    naked_twins = []
-    for unit in unitlist:
-        potential_twins = {cell: values[cell] for cell in unit if len(values[cell]) == 2}
-

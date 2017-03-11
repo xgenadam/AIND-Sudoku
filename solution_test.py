@@ -91,7 +91,20 @@ class TestDiagonalSudoku(unittest.TestCase):
                           'D1': '5'}
 
     def test_solve(self):
-        self.assertEqual(solution.solve(self.diagonal_grid), self.solved_diag_sudoku)
+        from utils import display, potential_grid_values
+        # values = potential_grid_values(self.diagonal_grid)
+        my_soln = solution.solve(self.diagonal_grid)
+
+        # print('\ninitial grid\n')
+        # display(values)
+        #
+        print('\nmy grid\n')
+        display(my_soln)
+
+        print('\nideal solution\n')
+        display(self.solved_diag_sudoku)
+
+        self.assertEqual(my_soln, self.solved_diag_sudoku)
 
 if __name__ == '__main__':
     unittest.main()

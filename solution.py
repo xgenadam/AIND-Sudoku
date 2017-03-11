@@ -1,5 +1,5 @@
 from utils import *
-from reduce import reduce_puzzle as reduce
+from reduce import reduce_puzzle
 from only_choice import only_choice
 from tree_search import search
 
@@ -74,7 +74,24 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
-    pass
+    from unittest.mock import patch
+    diagonal_units = [[row + col for row, col in diag]
+                      for diag in [list(zip(rows, cols)),
+                                   list(zip(rows, cols[-1::-1]))]]
+    values = potential_grid_values(grid)
+    display(values)
+    new_unit_list = unitlist + diagonal_units
+    # in all relevant scopes lets replace the regular unit list with our own one that includes diagonals
+    with patch('{}.unitlist'.format(__name__), new=new_unit_list):
+        with patch('only_choice.unitlist', new=new_unit_list):
+            with patch('utils.unitlist', new=new_unit_list):
+                reduce_puzzle(values)
+                only_choice(values)
+                values = search(values)
+                assert not contains_clashes(values)
+                assert sudoku_solved(values)
+    return values
+
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
