@@ -34,61 +34,35 @@ def naked_twins(values):
     # Find all instances of naked twins
     # Eliminate the naked twins as possibilities for their peers
     for unit in unitlist:
-        potential_twin_dict = {cell: values[cell] for cell in unit if len(values[cell]) >= 2}
+        unsolved_values_dict = {cell: values[cell] for cell in unit if len(values[cell]) == 2}
+
+        twin_values = set()
+
         values_cell_dict = {}
-        for potential_twin_cell, potential_twin_values in potential_twin_dict.items():
-            location_list = values_cell_dict.get(potential_twin_values, [])
-            location_list.append(potential_twin_cell)
-            values_cell_dict[potential_twin_values] = location_list
+
+        for idx_0, (location, vals) in enumerate(unsolved_values_dict.items()):
+            combs = [[tuple(sorted([val_1, val_2])) for val_2 in vals[idx_1:] if val_1 != val_2] for idx_1, val_1 in enumerate(vals)]
+            current_cell_twin_values = set(chain(*combs))
+            twin_values.update(current_cell_twin_values)
+
+            for twins in current_cell_twin_values:
+                location_list = values_cell_dict.get(twins, [])
+                location_list.append(location)
+                values_cell_dict[twins] = location_list
+
+        # import pdb; pdb.set_trace()
 
         for twin_values, twin_value_locations in values_cell_dict.items():
             if len(twin_value_locations) >= 2:
-                # values_cell_dict.pop(twin_values)
-                # print('twin values {}, locations {}'.format(twin_values, twin_value_locations))
+                # print(twin_values, twin_value_locations)
                 for peer in [cell for cell in unit if cell not in twin_value_locations]:
                     peer_values = values[peer]
-                    for value in twin_values:
-                        peer_values.replace(value, '')
-
-                    values[peer] = peer_values
+                    if set(twin_values) & set(peer_values):
+                        for value in twin_values:
+                            peer_values = peer_values.replace(value, '')
+                        values[peer] = peer_values
 
     return values
-
-# def cross(A, B):
-#     "Cross product of elements in A and elements in B."
-#     pass
-
-# def grid_values(grid):
-#     """
-#     Convert grid into a dict of {square: char} with '123456789' for empties.
-#     Args:
-#         grid(string) - A grid in string form.
-#     Returns:
-#         A grid in dictionary form
-#             Keys: The boxes, e.g., 'A1'
-#             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
-#     """
-#     pass
-#
-# def display(values):
-#     """
-#     Display the values as a 2-D grid.
-#     Args:
-#         values(dict): The sudoku in dictionary form
-#     """
-#     pass
-
-# def eliminate(values):
-#     pass
-
-# def only_choice(values):
-#     pass
-
-# def reduce_puzzle(values):
-#     pass
-
-# def search(values):
-#     pass
 
 
 def solve(grid):

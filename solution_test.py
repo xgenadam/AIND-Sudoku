@@ -69,7 +69,7 @@ class TestNakedTwins(unittest.TestCase):
 
     def test_naked_twins(self):
         from utils import display
-        print('initial sudoku')
+        print('\ninitial sudoku\n')
         display(self.before_naked_twins_1)
 
         print('\n my solution \n')
